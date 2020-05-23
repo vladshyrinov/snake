@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.game-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#game-board {
+    width: 800px;
+    height: 600px;
+    background-color: #e4d7e4;
+    border: 1px solid #000;
+}
+
+#snake {
+    width: 40px;
+    height: 40px;
+    background-color: #00ff00;
+}
+
+.game-control {
+    margin-top: 10px;
+}
