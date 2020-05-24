@@ -13,16 +13,50 @@
 }
 
 #game-board {
+    position: relative;
     width: 800px;
     height: 600px;
-    background-color: #e4d7e4;
     border: 1px solid #000;
 }
 
 #snake {
-    width: 40px;
-    height: 40px;
-    background-color: #00ff00;
+    position: absolute;
+    background-color: gray;
+    z-index: 10;
+}
+
+.food {
+    position: absolute;
+}
+
+.apple {
+    background-color: green;
+    background-image: url("./assets/img/apple.jpg");
+    background-size: contain;
+}
+
+.pear {
+    background-color: orange;
+}
+
+.banana {
+    background-color: yellow;
+}
+
+.boost {
+    background-color: red;
+}
+
+.slowdown {
+    background-color: lightblue;
+}
+
+.bomb {
+    background-color: black;
+}
+
+.double {
+    background-color: violet;
 }
 
 .game-control {

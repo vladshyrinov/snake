@@ -1,8 +1,8 @@
 import { Direction } from "../enums/Direction.js";
 
 class Snake {
-    constructor(snakeId, step, X, Y) {
-        this.initSnakeParams(snakeId, step, X, Y);
+    constructor(snakeId, size, X, Y) {
+        this.initSnakeParams(snakeId, size, X, Y);
     }
 
     get direction() {
@@ -13,14 +13,20 @@ class Snake {
         this.currentDirection = direction;
     }
 
-    initSnakeParams = (snakeId, step = 1, X = 0, Y = 0) => {
+    initSnakeParams = (snakeId, size, X = 0, Y = 0) => {
         const snake = document.getElementById(snakeId);
         this.domElem = snake;
-        this.height = snake.clientHeight;
-        this.width = snake.clientWidth;
+        this.height = size;
+        this.width = size;
+        this.step = size;
+        this.setWidthAndHeight(size);
         this.setXYPosition(X, Y);
         this.currentDirection = Direction.RIGHT;
-        this.step = step;
+    }
+
+    setWidthAndHeight = (size) => {
+        this.domElem.style.width = `${size}px`;
+        this.domElem.style.height = `${size}px`;
     }
 
     getXYPosition = () => ({X: this.X, Y: this.Y});
