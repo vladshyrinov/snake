@@ -6,115 +6,38 @@ import { FoodType } from "./enums/FoodType.js";
 import { FoodBonus } from "./models/FoodBonus.js";
 import { BonusType } from "./enums/BonusType.js";
 
-let addFoodBonusTimeoutId;
+/** GLOBAL VARIABLES DECLARATION BLOCK  */
+
+// initialization of let variables is located in initializeGameVariables function
+let addBonusFoodTimeoutId;
 let moveSnakeTimeoutId;
-let points = 0;
-let gameOver = false;
-let snakeMoveInterval = 300;
-// size (width and height) of elements are equal to step of the snake
-const size = 40;
+let points;
+let gameOver;
+let snakeMoveInterval;
+let keyDownEventListener;
+let isKeyAlreadyPressedinCycle;
+
+// game constants
+const size = 20; // size (width and height) of elements are equal to step of the snake
+const initialSnakeCellsAmount = 10;
 const bonusFoodCreationinterval = 10000;
-const foodList = [];
-const bonusFoodList = [];
+const foodList = []; // apples food list 
+const bonusFoodList = []; // other food list
 const gameBoard = new GameBoard("game-board");
 
-const applyBonuses = (foodType) => {
-    const bonuses = FoodBonus[foodType];
+/** GLOBAL VARIABLES DECLARATION BLOCK END */
 
-    for (let bonusType in bonuses) {
-        if (bonusType === BonusType.POINTS) {
-            points += bonuses[bonusType];
-        }
 
-        if (bonusType === BonusType.DEAD) {
-            gameOver = true;
-        }
-
-        if (bonusType === BonusType.SPEED) {
-            snakeMoveInterval /= bonuses[bonusType];
-        }
-
-        if (bonusType === BonusType.MULTIPLY) {
-            points *= bonuses[bonusType];
-        }
-    }
-
-    console.log("Current score:", points);
-    console.log("Snake move period", snakeMoveInterval);
-}
-
-const logGameOver = () => {
-    const failSound = new Audio("./assets/sounds/fail.mp3");
-    failSound.play();
-    console.log("Game Over");
-}
-
-const isHitWall = (snake, gameBoard) => {    
-    if (snake.direction === Direction.UP) {
-        if (snake.Y - snake.step < 0) {
-            return true;
-        } 
-    }
-
-    if (snake.direction === Direction.DOWN) {
-        if (snake.Y + snake.step > gameBoard.height - snake.height) {
-            return true;
-        }
-    }
-
-    if (snake.direction === Direction.RIGHT) {
-        if (snake.X + snake.step > gameBoard.width - snake.width) {
-            return true;
-        }
-    }
-
-    if (snake.direction === Direction.LEFT) {
-        if (snake.X - snake.step < 0) {
-            return true;
-        } 
-    }
-
-    return false;
-}
+/** FOOD AND BONUSES MANAGEMENT BLOCK */
 
 const isFoodEaten = (snake, food) => {
-    if (snake && food && snake.X === food.X && snake.Y === food.Y) 
+    if (snake && food && snake.head.X === food.X && snake.head.Y === food.Y) 
         return true;
 
     return false;
 }
 
-const startListenKeyDown = (snake) => {
-    window.addEventListener('keydown', event => {
-        if (event.keyCode < 37 || event.keyCode > 40)
-            return;
-    
-        switch(event.keyCode) {
-            // arrow left
-            case 37:
-                if (snake.direction !== Direction.RIGHT)
-                    snake.direction = Direction.LEFT;
-                break;
-            // arrow up
-            case 38:
-                if (snake.direction !== Direction.DOWN)
-                    snake.direction = Direction.UP;
-                break;
-            // arrow right
-            case 39:
-                if (snake.direction !== Direction.LEFT)
-                    snake.direction = Direction.RIGHT;
-                break;
-            // arrow down
-            case 40:
-                if (snake.direction !== Direction.UP)
-                    snake.direction = Direction.DOWN;
-                break;
-            default:
-                return;
-        }
-    });
-}
+const isFruitEaten = food => [FoodType.APPLE, FoodType.PEAR, FoodType.BANANA].includes(food);
 
 const createRandomFoodPosition = (size, boardWidth, boardHeight) => {
     let X = Math.floor(Math.random() * (boardWidth / size)) * size;
@@ -124,7 +47,7 @@ const createRandomFoodPosition = (size, boardWidth, boardHeight) => {
 
 const addFoodToGameBoard = (type, size, gameBoard, isBonus = false) => {
     const foodPosition = createRandomFoodPosition(size, gameBoard.width, gameBoard.height);
-    const food = new Food(type, size, foodPosition.X, foodPosition.Y);
+    const food = new Food(type, foodPosition.X, foodPosition.Y, size);
     gameBoard.domElem.appendChild(food.domElem);
     if (isBonus) {
         bonusFoodList.push(food);
@@ -134,13 +57,19 @@ const addFoodToGameBoard = (type, size, gameBoard, isBonus = false) => {
 } 
 
 const removeFoodFromGameBoard = (gameBoard, isBonus = false) => {
-    let food;
-    if (isBonus) {
-        food = bonusFoodList.pop();
-    } else {
-        food = foodList.pop();
-    }
+    const food = isBonus ? bonusFoodList.pop() : foodList.pop();
     gameBoard.domElem.removeChild(food.domElem);
+}
+
+// Standard Normal variate using Box-Muller transform.
+function normalDistributionRandom() {
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+    if (num > 1 || num < 0) return normalDistributionRandom(); // resample between 0 and 1
+    return num;
 }
 
 const chooseRandomBonusFoodType = () => {
@@ -173,7 +102,32 @@ const chooseRandomBonusFoodType = () => {
     }
 }
 
-const addFoodBonus = (size, gameBoard) => () => {
+const applyBonuses = foodType => {
+    const bonuses = FoodBonus[foodType];
+
+    for (let bonusType in bonuses) {
+        if (bonusType === BonusType.POINTS) {
+            points += bonuses[bonusType];
+        }
+
+        if (bonusType === BonusType.DEAD) {
+            gameOver = true;
+        }
+
+        if (bonusType === BonusType.SPEED) {
+            snakeMoveInterval /= bonuses[bonusType];
+        }
+
+        if (bonusType === BonusType.MULTIPLY) {
+            points *= bonuses[bonusType];
+        }
+    }
+
+    console.log("Current score:", points);
+    console.log("Snake move period", snakeMoveInterval);
+}
+
+const addBonusFoodToGameBoard = (size, gameBoard) => () => {
     if (!gameOver) {
         if (bonusFoodList.length) {
             removeFoodFromGameBoard(gameBoard, true);
@@ -181,62 +135,163 @@ const addFoodBonus = (size, gameBoard) => () => {
         const foodType = chooseRandomBonusFoodType();
         addFoodToGameBoard(foodType, size, gameBoard, true);
     
-        addFoodBonusTimeoutId = setTimeout(addFoodBonus(size, gameBoard), bonusFoodCreationinterval);
+        addBonusFoodTimeoutId = setTimeout(addBonusFoodToGameBoard(size, gameBoard), bonusFoodCreationinterval);
     }
 } 
 
+const checkSnakeNutrition = (snake, isBonus = false) => {
+    let shouldSnakeGrow = false;
+    const food = isBonus ? bonusFoodList[0] : foodList[0]; 
+    
+    if (isFoodEaten(snake, food)) {
+        // const failSound = new Audio("./assets/sounds/tasty-cut.mp3");
+        // failSound.play();
+        applyBonuses(food.type);
+        shouldSnakeGrow = isFruitEaten(food.type);
+        removeFoodFromGameBoard(gameBoard, isBonus);
+
+        if (!isBonus) {
+            addFoodToGameBoard(FoodType.APPLE, size, gameBoard);
+        }
+    }
+
+    return shouldSnakeGrow;
+} 
+
+/** FOOD AND BONUSES MANAGEMENT BLOCK END*/
+
+
+/** SNAKE MOVEMENT BLOCK */
+
+const keyDownHandler = snake => event => {
+    if (event.keyCode < 37 || event.keyCode > 40 || isKeyAlreadyPressedinCycle)
+        return;
+
+    isKeyAlreadyPressedinCycle = true;
+
+    switch(event.keyCode) {
+        // arrow left
+        case 37:
+            if (snake.direction !== Direction.RIGHT)
+                snake.direction = Direction.LEFT;
+            break;
+        // arrow up
+        case 38:
+            if (snake.direction !== Direction.DOWN)
+                snake.direction = Direction.UP;
+            break;
+        // arrow right
+        case 39:
+            if (snake.direction !== Direction.LEFT)
+                snake.direction = Direction.RIGHT;
+            break;
+        // arrow down
+        case 40:
+            if (snake.direction !== Direction.UP)
+                snake.direction = Direction.DOWN;
+            break;
+        default:
+            return;
+    }
+}
+
+const startListenKeyDownEvent = (snake) => {
+    keyDownEventListener = keyDownHandler(snake);
+    window.addEventListener('keydown', keyDownEventListener);
+}
+
+const stopListenKeyDownEvent = () => {
+    window.removeEventListener('keydown', keyDownEventListener);
+}
+
+const logGameOver = () => {
+    // const failSound = new Audio("./assets/sounds/fail.mp3");
+    // failSound.play();
+    console.log("Game Over");
+}
+
+const isSnakeHitGameBoardWall = (snake, gameBoard) => {    
+    if (snake.direction === Direction.UP) {
+        if (snake.head.Y - snake.step < 0) {
+            return true;
+        } 
+    }
+
+    if (snake.direction === Direction.DOWN) {
+        if (snake.head.Y + snake.step > gameBoard.height - snake.head.height) {
+            return true;
+        }
+    }
+
+    if (snake.direction === Direction.RIGHT) {
+        if (snake.head.X + snake.step > gameBoard.width - snake.head.width) {
+            return true;
+        }
+    }
+
+    if (snake.direction === Direction.LEFT) {
+        if (snake.head.X - snake.step < 0) {
+            return true;
+        } 
+    }
+
+    return false;
+}
+
 const moveSnake = (snake, gameBoard) => () => {            
-    if (isFoodEaten(snake, foodList[0])) {
-        const failSound = new Audio("./assets/sounds/tasty.mp3");
-        failSound.play();
-        applyBonuses(foodList[0].type);
-        removeFoodFromGameBoard(gameBoard)
-        addFoodToGameBoard(FoodType.APPLE, size, gameBoard);
+    const shouldSnakeGrow = checkSnakeNutrition(snake) || checkSnakeNutrition(snake, true);
+
+    if (shouldSnakeGrow) {
+        snake.addSnakeCell(size, snake.tail.X, snake.tail.Y);
     }
 
-    if (isFoodEaten(snake, bonusFoodList[0])) {
-        const failSound = new Audio("./assets/sounds/tasty.mp3");
-        failSound.play();
-        applyBonuses(bonusFoodList[0].type);
-        removeFoodFromGameBoard(gameBoard, true);
-    }
-
-    if (gameOver || isHitWall(snake, gameBoard)) {
+    // checking gameOver in condition, because of possibility to eat the bomb type food
+    if (gameOver || isSnakeHitGameBoardWall(snake, gameBoard) || snake.hitBody) {
         gameOver = true;
         clearTimeout(moveSnakeTimeoutId);
-        clearTimeout(addFoodBonusTimeoutId);
+        clearTimeout(addBonusFoodTimeoutId);
         logGameOver();
         return;
     }
-    
+
     snake.move();
+
+    isKeyAlreadyPressedinCycle = false;
 
     moveSnakeTimeoutId = setTimeout(moveSnake(snake, gameBoard), snakeMoveInterval);
 }
 
-const clearPreviousGame = (gameBoard) => {
+/** SNAKE MOVEMENT BLOCK END */
+
+
+/** GAME START BLOCK */
+ 
+const clearPreviousGame = () => {
+    gameBoard.domElem.textContent = "";
+    foodList.length = 0;
+    bonusFoodList.length = 0;
+    stopListenKeyDownEvent();
+}
+
+const initializeGameVariables = () => {
+    clearPreviousGame();
     gameOver = false;
     points = 0;
     snakeMoveInterval = 300;
-
-    for (let i = 0; i < foodList.length; i++) {
-        removeFoodFromGameBoard(gameBoard);
-    }
-
-    for (let i = 0; i < bonusFoodList.length; i++) {
-        removeFoodFromGameBoard(gameBoard, true);
-    }
+    isKeyAlreadyPressedinCycle = false;
 }
 
 const startGame = () => {
-    const snake = new Snake("snake", size, 0, 0);
-    clearPreviousGame(gameBoard);
+    initializeGameVariables();
+    const snake = new Snake(gameBoard, size, initialSnakeCellsAmount);
     addFoodToGameBoard(FoodType.APPLE, size, gameBoard);
-    startListenKeyDown(snake);
-    addFoodBonusTimeoutId = setTimeout(addFoodBonus(size, gameBoard), bonusFoodCreationinterval);
+    startListenKeyDownEvent(snake);
+    addBonusFoodTimeoutId = setTimeout(addBonusFoodToGameBoard(size, gameBoard), bonusFoodCreationinterval);
     moveSnakeTimeoutId = setTimeout(moveSnake(snake, gameBoard), snakeMoveInterval);
 }
 
 const startButton = document.getElementById("start-button");
 startButton.addEventListener("click", startGame);
+
+/** GAME START BLOCK END */
 

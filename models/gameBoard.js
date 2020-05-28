@@ -1,13 +1,12 @@
 class GameBoard {
     constructor(boardId) {
-        this.initBoardParams(boardId);
+        this.initialize(boardId);
     }
 
-    initBoardParams(boardId) {
-        const board = document.getElementById(boardId);
-        this.domElem = board;
-        this.height = board.clientHeight;
-        this.width = board.clientWidth;
+    initialize(boardId) {
+        this.domElem = document.getElementById(boardId);
+        this.height = this.domElem.clientHeight;
+        this.width = this.domElem.clientWidth;
     }
 }
 

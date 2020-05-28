@@ -1,13 +1,14 @@
-class Food {
-    constructor(type, X, Y, size) {
-        this.initialize(type, X, Y, size);
+class SnakeCell {
+    constructor(X, Y, size) {
+        // snake is implemented as a doubly linked list, so each snake cell stores links to the previous and next cell
+        this.next = null;
+        this.prev = null;
+        this.initialize(X, Y, size);
     }
 
-    initialize(type, X, Y, size) {
-        this.type = type;
+    initialize(X, Y, size) {
         this.domElem = document.createElement("div");
-        this.domElem.classList.add('food');
-        this.domElem.classList.add(`${type.toLowerCase()}`);
+        this.domElem.classList.add('snake-cell');
         this.setXYPosition(X, Y);
         this.setWidthAndHeight(size);
     }
@@ -26,4 +27,4 @@ class Food {
     }
 }
 
-export default Food;
+export default SnakeCell;

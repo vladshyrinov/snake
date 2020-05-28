@@ -19,7 +19,7 @@
     border: 1px solid #000;
 }
 
-#snake {
+.snake-cell {
     position: absolute;
     background-color: gray;
     z-index: 10;
@@ -31,7 +31,7 @@
 
 .apple {
     background-color: green;
-    background-image: url("./assets/img/apple.jpg");
+    background-image: url("./assets/img/apple.png");
     background-size: contain;
 }
 
