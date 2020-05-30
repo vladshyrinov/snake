@@ -5,12 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="snake.css">
+    <link rel="icon" href="./assets/img/favicon-r.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="game-wrapper">        
-        <div id="game-board"></div>
+    <div class="game-wrapper">
+        <div class="points-wrapper">
+            <p>Points: <span class="points">0</span></p>
+        </div>        
+        <div id="game-board">
+            <!-- <div class="game-over">
+                <p>Game Over</p>
+                <p>Please click "Start Game" to start a new game</p>
+            </div> -->
+        </div>
         <div class="game-control">
-            <button id="start-button">Start Game</button>
+            <button class="btn" id="start-button">Start Game</button>
         </div>
     </div>
     <script type="module" src="index.js"></script>

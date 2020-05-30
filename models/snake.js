@@ -24,11 +24,11 @@ class Snake {
     }
     
     initializeSnakeCells = (size, initialCellsAmount) => {
-        for (let i = 0; i < initialCellsAmount; i++) {
+        for (let i = 1; i <= initialCellsAmount; i++) {
             const X = (initialCellsAmount - i) * size;
             const Y = 0;
             // special case for first child (head)
-            if (i === 0) {
+            if (i === 1) {
                 this.addSnakeCell(size, X, Y, true);
             } else {
                 this.addSnakeCell(size, X, Y);
@@ -37,10 +37,12 @@ class Snake {
     }
 
     addSnakeCell = (size, X, Y, isHead) => {
-        const snakeCell = new SnakeCell(X, Y, size);
+        let snakeCell;
         if (isHead) {
+            snakeCell = new SnakeCell(X, Y, size, this.currentDirection)
             this.head = snakeCell;
         } else {
+            snakeCell = new SnakeCell(X, Y, size)
             this.tail.next = snakeCell;
             snakeCell.prev = this.tail;
         }
@@ -49,36 +51,25 @@ class Snake {
         this.gameBoard.domElem.appendChild(snakeCell.domElem);
     }
 
-    // checkHitBody = (bodyCell) => {
-    //     if (this.currentDirection === Direction.UP) {
-    //         if (this.head.Y === bodyCell.Y + bodyCell.height && this.head.X === bodyCell.X) {
-    //             this.hitBody = true;
-    //         }
-    //     }
-
-    //     if (this.currentDirection === Direction.DOWN) {
-    //         if (this.head.Y + this.head.height === bodyCell.Y && this.head.X === bodyCell.X) {
-    //             this.hitBody = true;
-    //         }
-    //     }
-
-    //     if (this.currentDirection === Direction.RIGHT) {
-    //         if (this.head.X + this.head.width === bodyCell.X && this.head.Y === bodyCell.Y) {
-    //             this.hitBody = true;
-    //         }
-    //     }
-
-    //     if (this.currentDirection === Direction.LEFT) {
-    //         if (this.head.X === bodyCell.X + bodyCell.width && this.head.Y === bodyCell.Y) {
-    //             this.hitBody = true;
-    //         }
-    //     }
-    // }
-
-    checkHitBody = (bodyCell) => {
+    isHitBody = (bodyCell) => {
         if (this.head.Y === bodyCell.Y && this.head.X === bodyCell.X) {
-            this.hitBody = true;
+            return true;
         }
+
+        return false;
+    }
+
+    cutSnake = (snakeCell) => {
+        const startCell = snakeCell;
+        let currentCell = snakeCell;
+
+        while (currentCell !== null) {
+            this.gameBoard.domElem.removeChild(currentCell.domElem);
+            currentCell = currentCell.next;
+        }
+
+        this.tail = startCell.prev;
+        this.tail.next = null;
     }
 
     moveCells = (headX, headY) => {
@@ -86,16 +77,28 @@ class Snake {
         let oldCoords = null;
         let snakeCell = this.head;
 
+        this.hitBody = false;
+
         while (snakeCell !== null) {
             oldCoords = {X: snakeCell.X, Y: snakeCell.Y};
-            snakeCell.setXYPosition(newCoords.X, newCoords.Y);
+            
+            if (snakeCell === this.head) {
+                snakeCell.setXYPosition(newCoords.X, newCoords.Y, this.currentDirection);
+            } else {
+                snakeCell.setXYPosition(newCoords.X, newCoords.Y);
 
-            if (snakeCell !== this.head) {
-                this.checkHitBody(snakeCell);
+                if (this.isHitBody(snakeCell)) {
+                    this.hitBody = true;
+                    break;
+                }
             }
 
             newCoords = oldCoords;
             snakeCell = snakeCell.next;
+        }
+
+        if (this.hitBody) {
+            this.cutSnake(snakeCell);
         }
     }
 
