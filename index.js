@@ -7,6 +7,8 @@ import { FoodBonus } from "./models/FoodBonus.js";
 import { BonusType } from "./enums/BonusType.js";
 import { SoundType } from "./enums/SoundType.js";
 import { SoundFileName } from "./models/SoundFIleName.js";
+import { swipeEvent } from "./helpers/swipeEvent.js";
+import { keyDownEvent } from "./helpers/keyDownEvent.js";
 
 /** GLOBAL VARIABLES DECLARATION BLOCK  */
 
@@ -16,8 +18,6 @@ let moveSnakeTimeoutId;
 let points;
 let gameOver;
 let snakeMoveInterval;
-let keyDownEventListener;
-let touchEventListener;
 let isKeyAlreadyPressedInCycle;
 let size; // size (width and height) of elements are equal to step of the snake
 
@@ -234,13 +234,13 @@ const checkSnakeNutrition = (snake, isBonus = false) => {
 
 /** SNAKE MOVEMENT BLOCK */
 
-const keyDownHandler = snake => event => {
-    if (event.keyCode < 37 || event.keyCode > 40 || isKeyAlreadyPressedInCycle)
+const changeSnakeDirectionByKeyDown = snake => keyCode => {
+    if (keyCode < 37 || keyCode > 40 || isKeyAlreadyPressedInCycle)
         return;
 
     isKeyAlreadyPressedInCycle = true;
 
-    switch(event.keyCode) {
+    switch(keyCode) {
         // arrow left
         case 37:
             if (snake.direction !== Direction.RIGHT)
@@ -266,64 +266,22 @@ const keyDownHandler = snake => event => {
     }
 }
 
-const swipeHandler = snake => event => {   
-    const getClientX = event => event.touches[0].clientX;
-    const getClientY = event => event.touches[0].clientY;
-
-    const startTouchClientX = getClientX(event);
-    const startTouchClientY = getClientY(event);
-    let endTouchClientX;
-    let endTouchClientY;
-
-    const touchMove = event => {
-        endTouchClientX = getClientX(event);
-        endTouchClientY = getClientY(event);
-    }
-
-    const touchEnd = () => {
-        const xDiff = startTouchClientX - endTouchClientX;
-        const yDiff = startTouchClientY - endTouchClientY;
-    
-        if (Math.abs(xDiff) >= minSwipeThreshold || Math.abs(yDiff) >= minSwipeThreshold) {
-            if (Math.abs(xDiff) > Math.abs(yDiff)) {
-                if ( xDiff > 0 && snake.direction !== Direction.RIGHT) {
-                    snake.direction = Direction.LEFT;
-                } else if (snake.direction !== Direction.LEFT) {
-                    snake.direction = Direction.RIGHT;
-                }   
-            } else {
-                if ( yDiff > 0 && snake.direction !== Direction.DOWN) {
-                    snake.direction = Direction.UP;
-                } else if (snake.direction !== Direction.UP) { 
-                    snake.direction = Direction.DOWN;
-                } 
-            }
+const changeSnakeDirectionBySwipe = snake => (xDiff, yDiff) => {
+    if (Math.abs(xDiff) >= minSwipeThreshold || Math.abs(yDiff) >= minSwipeThreshold) {
+        if (Math.abs(xDiff) > Math.abs(yDiff)) {
+            if ( xDiff > 0 && snake.direction !== Direction.RIGHT) {
+                snake.direction = Direction.LEFT;
+            } else if (snake.direction !== Direction.LEFT) {
+                snake.direction = Direction.RIGHT;
+            }   
+        } else {
+            if ( yDiff > 0 && snake.direction !== Direction.DOWN) {
+                snake.direction = Direction.UP;
+            } else if (snake.direction !== Direction.UP) { 
+                snake.direction = Direction.DOWN;
+            } 
         }
-
-        window.removeEventListener("touchmove", touchMove);
-        window.removeEventListener("touchend", touchEnd);
     }
-
-    window.addEventListener("touchmove", touchMove);
-    window.addEventListener("touchend", touchEnd);
-}  
-
-const startListenSwipeEvent = (snake) => {
-    touchEventListener = swipeHandler(snake);
-    window.addEventListener("touchstart", touchEventListener);
-}
-
-const stopListenSwipeEvent = () => {
-    window.removeEventListener("touchstart", touchEventListener);
-}
-
-const startListenKeyDownEvent = (snake) => {
-    keyDownEventListener = keyDownHandler(snake);
-    window.addEventListener('keydown', keyDownEventListener);
-}
-
-const stopListenKeyDownEvent = () => {
-    window.removeEventListener('keydown', keyDownEventListener);
 }
 
 const logGameOver = () => {
@@ -390,8 +348,8 @@ const clearPreviousGame = () => {
     pointsDomElem.textContent = 0;
     foodList.length = 0;
     bonusFoodList.length = 0;
-    stopListenKeyDownEvent();
-    stopListenSwipeEvent();
+    keyDownEvent.stopListen();
+    swipeEvent.stopListen();
 }
 
 const initializeGameVariables = () => {
@@ -407,8 +365,8 @@ const startGame = () => {
     initializeGameVariables();
     const snake = new Snake(gameBoard, size, initialSnakeCellsAmount);
     addFoodToGameBoard(FoodType.APPLE, size, gameBoard, snake);
-    startListenKeyDownEvent(snake);
-    startListenSwipeEvent(snake);
+    keyDownEvent.startListen(changeSnakeDirectionByKeyDown(snake))
+    swipeEvent.startListen(changeSnakeDirectionBySwipe(snake));
     addBonusFoodTimeoutId = setTimeout(addBonusFoodToGameBoard(size, gameBoard, snake), bonusFoodCreationInterval);
     moveSnakeTimeoutId = setTimeout(moveSnake(snake, gameBoard), snakeMoveInterval);
 }
