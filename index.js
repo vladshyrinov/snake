@@ -398,7 +398,7 @@ const initializeGameVariables = () => {
     clearPreviousGame();
     gameOver = false;
     points = 0;
-    size = window.outerWidth > 768 ? 30 : 20
+    size = window.innerWidth > 768 ? 30 : 20;
     snakeMoveInterval = maxSnakeMoveInterval;
     isKeyAlreadyPressedInCycle = false;
 }

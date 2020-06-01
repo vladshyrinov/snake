@@ -27,7 +27,7 @@ body {
 
 #game-board {
     position: relative;
-    width: 810px;
+    width: 750px;
     height: 600px;
     flex-shrink: 0;
     /* background-color: #06D6A0; */
@@ -38,17 +38,17 @@ body {
     border: 1px solid #000;
 }
 
+@media (min-width: 426px) and (max-width: 768px) {
+    #game-board {
+        width: 420px;
+        height: 300px;
+    }
+}
+
 @media (max-width: 425px) {
     #game-board {
         width: 300px;
         height: 360px;
-    }
-}
-
-@media (min-width: 426px) and (max-width: 768px) {
-    #game-board {
-        width: 600px;
-        height: 300px;
     }
 }
 
