@@ -32,11 +32,7 @@ body {
     width: 750px;
     height: 600px;
     flex-shrink: 0;
-    /* background-color: #06D6A0; */
     background-color: #92AA83;
-    /* background-image: linear-gradient(45deg, #92AA83 25%, transparent 25%), linear-gradient(-45deg, #92AA83 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #92AA83 75%), linear-gradient(-45deg, transparent 75%, #92AA83 75%);
-    background-size: 60px 60px;
-    background-position: 0 0, 0 30px, 30px -30px, -30px 0px; */
     border: 1px solid #000;
 }
 
@@ -69,14 +65,13 @@ body {
 .snake-cell {
     position: absolute;
     z-index: 10;
-    /* border-radius: 10px;
-    background-color: rgb(83, 83, 83); */
     background-image: url("./assets/img/snakeCell.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 50%;
 
 }
+
 .snake-cell:first-child {
     background-image: url("./assets/img/snakeHead.png");
 }
