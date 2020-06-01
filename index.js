@@ -216,7 +216,7 @@ const checkSnakeNutrition = (snake, isBonus = false) => {
     const food = isBonus ? bonusFoodList[0] : foodList[0]; 
 
     if (isFoodEaten(snake, food)) {
-        playSound({soundType: SoundType.Food, foodType: food.type});
+        playSound({soundType: SoundType.FOOD, foodType: food.type});
         applyBonuses(food.type);
         shouldSnakeGrow = isFruitEaten(food.type);
         removeFoodFromGameBoard(gameBoard, isBonus);
@@ -355,7 +355,7 @@ const moveSnake = (snake, gameBoard) => () => {
     const snakeHitWall = isSnakeHitGameBoardWall(snake, gameBoard);
 
     if (snakeHitWall) {
-        playSound({soundType: SoundType.HitWall});
+        playSound({soundType: SoundType.HITWALL});
     }
 
     // checking gameOver in condition, because of possibility to eat the bomb type food
@@ -368,7 +368,7 @@ const moveSnake = (snake, gameBoard) => () => {
     }
 
     if (snake.hitBody) {
-        playSound({soundType: SoundType.Cut});
+        playSound({soundType: SoundType.CUT});
         points = Math.round((points / 2) / 10) * 10;
         pointsDomElem.textContent = points;
     }

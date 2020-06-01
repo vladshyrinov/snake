@@ -1,5 +1,5 @@
 export const SoundType = {
-    Food: "Food",
-    HitWall: "HitWall",
-    Cut: "Cut"
+    FOOD: "FOOD",
+    HITWALL: "HITWALL",
+    CUT: "CUT"
 };

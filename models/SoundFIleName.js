@@ -2,7 +2,7 @@ import { SoundType } from "../enums/SoundType.js";
 import { FoodType } from "../enums/FoodType.js";
 
 export const SoundFileName = {
-    [SoundType.Food]: {
+    [SoundType.FOOD]: {
         [FoodType.BOMB]: "bomb",
         [FoodType.DOUBLE]: "double",
         [FoodType.SLOWDOWN]: "slowdown",
@@ -11,6 +11,6 @@ export const SoundFileName = {
         [FoodType.PEAR]: "points",
         [FoodType.APPLE]: "points"
     },
-    [SoundType.HitWall]: "fail",
-    [SoundType.Cut]: "scissors"
+    [SoundType.HITWALL]: "fail",
+    [SoundType.CUT]: "scissors"
 };
