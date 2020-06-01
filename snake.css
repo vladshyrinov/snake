@@ -37,6 +37,20 @@
     border: 1px solid #000;
 }
 
+@media (max-width: 425px) {
+    #game-board {
+        width: 300px;
+        height: 360px;
+    }
+}
+
+@media (min-width: 426px) and (max-width: 768px) {
+    #game-board {
+        width: 600px;
+        height: 300px;
+    }
+}
+
 .game-over {
     position: absolute;
     height: 100%;
