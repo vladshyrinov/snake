@@ -5,6 +5,7 @@
 }
 
 body {
+    overscroll-behavior: none;
     background-color: #f1f7ee;
 }
 
