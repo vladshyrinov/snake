@@ -284,6 +284,11 @@ const changeSnakeDirectionByKeyDown = keyCode => {
 }
 
 const changeSnakeDirectionBySwipe = (xDiff, yDiff) => {
+    if (isKeyAlreadyPressedInCycle) 
+        return;
+
+    isKeyAlreadyPressedInCycle = true;
+
     if (Math.abs(xDiff) >= minSwipeThreshold || Math.abs(yDiff) >= minSwipeThreshold) {
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
             if ( xDiff > 0 && snake.direction !== Direction.RIGHT) {
