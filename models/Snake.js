@@ -17,13 +17,13 @@ class Snake {
         this.currentDirection = direction;
     }
 
-    initialize = (size, initialCellsAmount) => {
+    initialize(size, initialCellsAmount) {
         this.step = size;
         this.currentDirection = Direction.RIGHT;
         this.initializeSnakeCells(size, initialCellsAmount);
     }
     
-    initializeSnakeCells = (size, initialCellsAmount) => {
+    initializeSnakeCells(size, initialCellsAmount) {
         for (let i = 1; i <= initialCellsAmount; i++) {
             const X = (initialCellsAmount - i) * size;
             const Y = 0;
@@ -36,7 +36,7 @@ class Snake {
         }
     }
 
-    addSnakeCell = (size, X, Y, isHead) => {
+    addSnakeCell(size, X, Y, isHead) {
         let snakeCell;
         if (isHead) {
             snakeCell = new SnakeCell(X, Y, size, this.currentDirection)
@@ -51,7 +51,7 @@ class Snake {
         this.gameBoard.domElem.appendChild(snakeCell.domElem);
     }
 
-    isHitBody = (bodyCell) => {
+    isHitBody(bodyCell) {
         if (this.head.Y === bodyCell.Y && this.head.X === bodyCell.X) {
             return true;
         }
@@ -59,7 +59,7 @@ class Snake {
         return false;
     }
 
-    cutSnake = (snakeCell) => {
+    cutSnake(snakeCell) {
         const startCell = snakeCell;
         let currentCell = snakeCell;
 
@@ -72,7 +72,7 @@ class Snake {
         this.tail.next = null;
     }
 
-    moveCells = (headX, headY) => {
+    moveCells(headX, headY) {
         let newCoords = {X: headX, Y: headY};
         let oldCoords = null;
         let snakeCell = this.head;
@@ -102,7 +102,7 @@ class Snake {
         }
     }
 
-    move = () => {
+    move() {
         switch(this.currentDirection) {
             case Direction.RIGHT:
                 this.moveCells(this.head.X + this.step, this.head.Y);

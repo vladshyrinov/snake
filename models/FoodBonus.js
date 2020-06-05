@@ -8,7 +8,7 @@ export const FoodBonus = {
     [FoodType.PEAR]: {
         [BonusType.POINTS]: 10
     },
-    [FoodType.BANANA]: {
+    [FoodType.GRAPES]: {
         [BonusType.POINTS]: 50
     },
     [FoodType.BOMB]: {

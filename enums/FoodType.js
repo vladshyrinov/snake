@@ -1,7 +1,7 @@
 export const FoodType = {
     APPLE: "APPLE",
     PEAR: "PEAR",
-    BANANA: "BANANA",
+    GRAPES: "GRAPES",
     BOOST: "BOOST",
     SLOWDOWN: "SLOWDOWN",
     BOMB: "BOMB",

@@ -12,13 +12,13 @@ class Food {
         this.setWidthAndHeight(size);
     }
 
-    setXYPosition = (X, Y) => {
+    setXYPosition(X, Y) {
         this.X = X;
         this.Y = Y;
         this.domElem.style.transform = `translate(${X}px, ${Y}px)`;
     }
 
-    setWidthAndHeight = (size) => {
+    setWidthAndHeight(size) {
         this.width = size;
         this.height = size;
         this.domElem.style.width = `${size}px`;

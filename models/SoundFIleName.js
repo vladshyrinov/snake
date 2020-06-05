@@ -7,7 +7,7 @@ export const SoundFileName = {
         [FoodType.DOUBLE]: "double",
         [FoodType.SLOWDOWN]: "slowdown",
         [FoodType.BOOST]: "speed",
-        [FoodType.BANANA]: "points",
+        [FoodType.GRAPES]: "points",
         [FoodType.PEAR]: "points",
         [FoodType.APPLE]: "points"
     },

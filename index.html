@@ -9,20 +9,36 @@
     <link rel="icon" href="./assets/img/favicon-r.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="game-wrapper">
+    <header class="game-header">
+        <div class="best-score-wrapper">
+            <p>Best Score: <span class="best-score">0</span></p>
+        </div>
+        <div id="sound-toggler"></div>
+    </header>
+    <main class="game-wrapper">
         <div class="points-wrapper">
             <p>Points: <span class="points">0</span></p>
+        </div>
+        <div class="game-area">
+            <div class="game-over hide">
+                <div>
+                    <p class="game-over-message"></p>
+                    <p>Please click or touch "Start Game" button to start a new game</p>
+                </div>
+            </div>  
+            <div id="game-board"></div>      
         </div>        
-        <div id="game-board">
-            <!-- <div class="game-over">
-                <p>Game Over</p>
-                <p>Please click "Start Game" to start a new game</p>
-            </div> -->
-        </div>
         <div class="game-control">
-            <button class="btn" id="start-button">Start Game</button>
+            <button class="btn" id="start-button" aria-label="Start Game">Start Game</button>
+            <button class="btn pause-btn hide" id="pause-button" aria-label="Pause Game">Pause</button>
+            <button class="btn continue-btn hide" id="continue-button" aria-label="Continue Game">Continue</button>
         </div>
-    </div>
+    </main>
+    <footer class="game-footer">
+        Developed by <a target="_blank" title="Vladyslav Shyrinov" href="https://de.linkedin.com/in/vlad-shyrinov">Vladyslav Shyrinov</a> -
+        Image Designs by <a target="_blank" title="Anna Ostapenko" href="https://www.linkedin.com/in/anna-ostapenko-516313183/">Anna Ostapenko</a> -
+        Sounds from <a target="_blank" title="Sounds Library" href="https://freesound.org/" >Freesound.org</a> 
+    </footer>
     <script type="module" src="index.js"></script>
 </body>
 </html>

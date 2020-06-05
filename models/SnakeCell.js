@@ -11,11 +11,14 @@ class SnakeCell {
     initialize(X, Y, size, rotateDirection) {
         this.domElem = document.createElement("div");
         this.domElem.classList.add('snake-cell');
+        if (rotateDirection) {
+            this.domElem.classList.add('snake-head');
+        }
         this.setXYPosition(X, Y, rotateDirection);
         this.setWidthAndHeight(size);
     }
 
-    setXYPosition = (X, Y, rotateDirection) => {
+    setXYPosition(X, Y, rotateDirection) {
         this.X = X;
         this.Y = Y;
 
@@ -29,7 +32,7 @@ class SnakeCell {
         this.domElem.style.transform = transform;
     }
 
-    setWidthAndHeight = (size) => {
+    setWidthAndHeight(size) {
         this.width = size;
         this.height = size;
         this.domElem.style.width = `${size}px`;
