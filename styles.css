@@ -7,6 +7,7 @@
 body {
     overscroll-behavior: none;
     background-color: #f1f7ee;
+    overflow: hidden;
 }
 
 .hide {
@@ -61,7 +62,7 @@ body {
 .game-area {
     position: relative;
     width: 750px;
-    height: 600px;
+    height: 570px;
     flex-shrink: 0;
 }
 
@@ -237,7 +238,7 @@ body {
     }
 
     .game-footer {
-        font-size: 14px;
+        font-size: 12px;
         padding: 2px;
         width: calc(100% - 4px);
     }
