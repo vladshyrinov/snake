@@ -9,7 +9,7 @@ import { SoundType } from "./enums/SoundType.js";
 import { SoundFileName } from "./models/SoundFIleName.js";
 import { swipeEvent } from "./helpers/swipeEvent.js";
 import { keyDownEvent } from "./helpers/keyDownEvent.js";
-import { getParam, saveParam, preloadImages } from './utils.js'
+import { getParam, saveParam, preloadImages, isIOS } from './utils.js'
 import { GameOverMessage } from "./enums/GameOverMessage.js";
 import { GameControlType } from "./enums/GameControlType.js";
 
@@ -456,6 +456,7 @@ const continueGame = () => {
 }
 
 const startGame = () => {
+    // Safari turns on sound just on user action, because of this is added launchSafariSound function
     launchSafariSound();
     initializeGameVariables();
     addFoodToGameBoard(FoodType.APPLE);
@@ -473,7 +474,13 @@ const startGame = () => {
 bestScoreDomElem.textContent = bestScore;
 gameControlDomElems[GameControlType.START].addEventListener("click", startGame);
 gameControlDomElems[GameControlType.PAUSE].addEventListener("click", pauseGame);
-gameControlDomElems[GameControlType.CONTINUE].addEventListener("click", continueGame);
+
+// added IOS check for touch event instead of click to have possibility of having sound on Safari for IOS
+if (isIOS()) {
+    gameControlDomElems[GameControlType.CONTINUE].addEventListener("touchstart", continueGame);
+} else {
+    gameControlDomElems[GameControlType.CONTINUE].addEventListener("click", continueGame);
+}
 soundTogglerDomElem.addEventListener("click", toggleSound);
 // preload sound on and off images not to have blinking, when sound is toggled
 preloadImages(["./assets/img/sound-on.png", "./assets/img/sound-off.png"]);

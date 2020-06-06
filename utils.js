@@ -11,3 +11,5 @@ export const preloadImages = (images) => {
         preloadImages[i].src = images[i]
     }
 };
+
+export const isIOS = () => navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
