@@ -7,7 +7,7 @@ The game is available to play on mobile phone, Mac or PC.
 
 Click and play: [The Snake](https://vladshyrinov.github.io/snake/)
 
-<img src="./assets/img/game-big.png" alt="Game Board" width="400">
+<img src="./assets/img/game-big.png" alt="Game Board" width="700">
 
 ## Game rules
 
