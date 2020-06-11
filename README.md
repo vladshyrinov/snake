@@ -7,6 +7,8 @@ The game is available to play on mobile phone, Mac or PC.
 
 Click and play: [The Snake](https://vladshyrinov.github.io/snake/)
 
+<img src="./assets/img/apple.png" alt="Apple Bonus Food" width="200">
+
 ## Game rules
 
 You play with the green and tiny snake, you goal is to earn so many points as possible.
