@@ -28,23 +28,23 @@ There are 2 types of food:
 1. Usual one: 
     * Apple
         - Prize: 5 points
-        - Look: ![Apple Bonus Food](/assets/img/apple.png | width=20)
+        - Look: <img src="./assets/img/apple.png" alt="Apple Bonus Food" width="20">
 2. Bonus food:
     * Pear 
         - Prize: 10 points
-        - Look: ![Pear Bonus Food](/assets/img/pear.png | width=20)
+        - Look: <img src="./assets/img/pear.png" alt="Pear Bonus Food" width="20">
     * Grapes
         - Prize: 50 points
-        - Look: ![Grapes Bonus Food](/assets/img/grapes.png | width=20)
+        - Look: <img src="./assets/img/grapes.png" alt="Grapes Bonus Food" width="20">
     * Slowdown
         - Prize: slow down by 2 times (there is a minimum threshold)
-        - Look: ![Slowdown Bonus Food](/assets/img/ice.png | width=20)
+        - Look: <img src="./assets/img/ice.png" alt="Slowdown Bonus Food" width="20">
     * Boost
         - Prize: speed up by 2 times (there are no maximum threshold)
-        - Look: ![Boost Bonus Food](/assets/img/lightning.png | width=20)
+        - Look: <img src="./assets/img/lightning.png" alt="Boost Bonus Food" width="20">
     * Bomb
         - Prize: Death (better avoid them)
-        - Look: ![Bomb Bonus Food](/assets/img/bomb.png | width=20)
+        - Look: <img src="./assets/img/bomb.png" alt="Bomb Bonus Food" width="20">
     * Double
         - Prize: points are doubled
         - Look: 2X
