@@ -49,7 +49,8 @@ There are 2 types of food:
         - Look: <img src="./assets/img/bomb.png" alt="Bomb Bonus Food" width="20">
     * Double
         - Prize: points are doubled
-        - Look: 2X
+        - Look: <img src="./assets/img/double.png" alt="Double Bonus Food" width="20">
+
 
 ### Features
 
