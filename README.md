@@ -18,19 +18,19 @@ There are 2 types of food:
 2. Bonus food:
     * Pear 
         - Prize: 10 points
-        - Look: ![Pear Bonus Food](/assets/img/pear.png)
+        - Look: ![Pear Bonus Food](/assets/img/pear.png | width=20)
     * Grapes
         - Prize: 50 points
-        - Look: ![Grapes Bonus Food](/assets/img/grapes.png)
+        - Look: ![Grapes Bonus Food](/assets/img/grapes.png | width=20)
     * Slowdown
         - Prize: slow down by 2 times (there is a minimum threshold)
-        - Look: ![Slowdown Bonus Food](/assets/img/ice.png)
+        - Look: ![Slowdown Bonus Food](/assets/img/ice.png | width=20)
     * Boost
         - Prize: speed up by 2 times (there are no maximum threshold)
-        - Look: ![Boost Bonus Food](/assets/img/lightning.png)
+        - Look: ![Boost Bonus Food](/assets/img/lightning.png | width=20)
     * Bomb
         - Prize: Death (better avoid them)
-        - Look: ![Bomb Bonus Food](/assets/img/bomb.png)
+        - Look: ![Bomb Bonus Food](/assets/img/bomb.png | width=20)
     * Double
         - Prize: points are doubled
         - Look: 2X
